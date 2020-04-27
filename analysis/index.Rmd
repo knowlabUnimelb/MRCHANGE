@@ -8,4 +8,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+This project is for the SFT analysis of a same-direction and opposite-direction change detection task.
+
+Experimental code is located [here]<code/MRCHANGE_PY>
