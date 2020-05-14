@@ -22,6 +22,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -290,7 +292,13 @@ $(document).ready(function () {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/knowlabUnimelb/MRCHANGE">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -307,7 +315,7 @@ $(document).ready(function () {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -316,7 +324,7 @@ $(document).ready(function () {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -325,10 +333,10 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-04-27
+<strong>Last updated:</strong> 2020-05-14
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>MRCHANGE/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -344,38 +352,105 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongb1a8f91"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> b1a8f91 </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongb1a8f91" class="panel-collapse collapse">
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200427code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200427)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200427code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200427)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomknowlabUnimelbMRCHANGEtreee5d99941ad9ee280418e3bb3a413bec1dc778756targetblanke5d9994a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/knowlabUnimelb/MRCHANGE/tree/e5d99941ad9ee280418e3bb3a413bec1dc778756" target="_blank">e5d9994</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomknowlabUnimelbMRCHANGEtreee5d99941ad9ee280418e3bb3a413bec1dc778756targetblanke5d9994a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version b1a8f91. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/knowlabUnimelb/MRCHANGE/tree/e5d99941ad9ee280418e3bb3a413bec1dc778756" target="_blank">e5d9994</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/site_libs/
 
 Untracked files:
     Untracked:  code/MRCHANGE_PY/
+    Untracked:  data/data_dictionary.csv
+    Untracked:  data/s1114/
+
+Unstaged changes:
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -416,10 +491,27 @@ Message
 <tbody>
 <tr>
 <td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/knowlabUnimelb/MRCHANGE/627875bc09acd2d28f41d8d0adc025f0f006acd0/docs/index.html" target="_blank">627875b</a>
+</td>
+<td>
+knowlabUnimelb
+</td>
+<td>
+2020-04-27
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
 Rmd
 </td>
 <td>
-b1a8f91
+<a href="https://github.com/knowlabUnimelb/MRCHANGE/blob/b1a8f914bd85c07f05efa76a11d9354f2c86ca55/analysis/index.Rmd" target="_blank">b1a8f91</a>
 </td>
 <td>
 knowlabUnimelb
@@ -436,7 +528,7 @@ Initial commit
 Rmd
 </td>
 <td>
-1a4ffe5
+<a href="https://github.com/knowlabUnimelb/MRCHANGE/blob/1a4ffe5a6ceaefab2ea0470e0ed6421c4677b2be/analysis/index.Rmd" target="_blank">1a4ffe5</a>
 </td>
 <td>
 knowlabUnimelb
@@ -457,6 +549,155 @@ Start workflowr project.
 </div>
 <p>This project is for the SFT analysis of a same-direction and opposite-direction change detection task.</p>
 <p>Experimental code is located [here]<code/MRCHANGE_PY></p>
+<pre class="r"><code>rm(list=ls())
+library(tidyverse)
+library(workflowr)
+library(sft)
+library(reshape2)
+
+## Reading data and variable names 
+#define working directories
+inputdir &lt;- &quot;data&quot;
+
+# list of subject directories storing data files
+fnLoc = c(&#39;s1114&#39;)
+
+# Column names
+column_file      &lt;- read.csv(paste(inputdir,&quot;data_dictionary.csv&quot;,sep=&quot;/&quot;), header = TRUE)
+
+fp = file.path(inputdir, fnLoc) # File path 
+
+# Function to merge multiple .dat files
+mergeFiles = function(mypath, colfile){
+  filenames=list.files(path=mypath, full.names=TRUE)
+  datalist = lapply(filenames, function(x){read.table(file=x,header=FALSE, sep=&quot;,&quot;, col.names=colfile$column, comment.char=&quot;#&quot;)})
+  bind_rows(datalist, .id = &quot;column_label&quot;)
+}
+
+# All data
+data = mergeFiles(fp, column_file)
+# data = data[data$session == 11, ]
+
+# Reorder data by session and trial
+data &lt;- data[order(as.numeric(data$session)), ] 
+
+# Remove timeouts [response ==9&#39;s]
+data = data[as.numeric(data$response) != 9, ]
+
+# Split data into same_direction and opposite_direction conditions
+swaps = data[as.numeric(data$condition) == 1, ]
+diffs = data[as.numeric(data$condition) == 2, ]
+
+### JUST FOR SORTING OUT DATA ANALYSIS
+## For 1114, swap response and correct for condition 1, item HH
+swaps$response[grep(&quot;HH&quot;, swaps$item_condition)] = !swaps$response[grep(&quot;HH&quot;, swaps$item_condition)]
+swaps$correct[grep(&quot;HH&quot;, swaps$item_condition)] = !swaps$correct[grep(&quot;HH&quot;, swaps$item_condition)]
+###
+
+# Accuracy averages for each item
+acc.swaps = aggregate(as.numeric(swaps$correct), by=list(swaps$item_condition), FUN=mean)
+acc.diffs = aggregate(as.numeric(diffs$correct), by=list(diffs$item_condition), FUN=mean)
+
+rt.swaps = aggregate(as.numeric(swaps$rt), by=list(swaps$item_condition), FUN=mean)
+rt.diffs = aggregate(as.numeric(diffs$rt), by=list(diffs$item_condition), FUN=mean)
+
+
+# Extract double targets
+doubletargets = c(&quot;HH&quot;, &quot;HL&quot;, &quot;LH&quot;, &quot;LL&quot;)
+dt.swaps = swaps[grep(paste(doubletargets, collapse=&quot;|&quot;), swaps$item_condition), ]
+dt.diffs = swaps[grep(paste(doubletargets, collapse=&quot;|&quot;), diffs$item_condition), ]
+
+# Extract RTs
+data2sic = function(datatable){
+    rt.HH = datatable$rt[trimws(as.character(datatable$item_condition)) == &quot;HH&quot; &amp; datatable$correct == 1]*1000
+    rt.HL = datatable$rt[trimws(as.character(datatable$item_condition)) == &quot;HL&quot; &amp; datatable$correct == 1]*1000
+    rt.LH = datatable$rt[trimws(as.character(datatable$item_condition)) == &quot;LH&quot; &amp; datatable$correct == 1]*1000
+    rt.LL = datatable$rt[trimws(as.character(datatable$item_condition)) == &quot;LL&quot; &amp; datatable$correct == 1]*1000
+   
+    sic(rt.HH, rt.HL, rt.LH, rt.LL)
+ }
+ 
+ sic.swaps = data2sic(dt.swaps)
+ sic.diffs = data2sic(dt.diffs)
+ 
+ # Plot
+ plot(sic.swaps$SIC, do.p=FALSE, ylim=c(-.5,.5))</code></pre>
+<p><img src="figure/index.Rmd/readdata-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code> plot(sic.diffs$SIC, do.p=FALSE, ylim=c(-.5,.5))</code></pre>
+<p><img src="figure/index.Rmd/readdata-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Set up data into standard form
+# standard = matrix(data=NA, nrow=nrow(swaps), ncol=ncol(swaps))
+ toStandardForm = function(datatable, condition){
+   standard_mat = matrix(data=NA, nrow=nrow(datatable), ncol=6)
+   colnames(standard_mat) &lt;- c(&quot;Subject&quot;, &quot;Condition&quot;, &quot;RT&quot;, &quot;Correct&quot;, &quot;Channel1&quot;, &quot;Channel2&quot;)
+   rownames(standard_mat) &lt;- 1:nrow(datatable)
+   standard &lt;- as.data.frame(standard_mat)
+   
+   standard$Subject = datatable$subject
+   standard$Condition = rep(&quot;OR&quot;, nrow(standard))
+   standard$RT = datatable$rt*1000
+   standard$Correct = datatable$correct
+   standard$Channel1[grep(paste(c(&quot;SS&quot;, &quot;SL&quot;, &quot;SH&quot;), collapse=&quot;|&quot;), datatable$item_condition)] = 0
+   standard$Channel1[grep(paste(c(&quot;LS&quot;, &quot;LL&quot;, &quot;LH&quot;), collapse=&quot;|&quot;), datatable$item_condition)] = 1
+   standard$Channel1[grep(paste(c(&quot;HS&quot;, &quot;HL&quot;, &quot;HH&quot;), collapse=&quot;|&quot;), datatable$item_condition)] = 2
+   
+   standard$Channel2[grep(paste(c(&quot;SS&quot;, &quot;LS&quot;, &quot;HS&quot;), collapse=&quot;|&quot;), datatable$item_condition)] = 0
+   standard$Channel2[grep(paste(c(&quot;SL&quot;, &quot;LL&quot;, &quot;HL&quot;), collapse=&quot;|&quot;), datatable$item_condition)] = 1
+   standard$Channel2[grep(paste(c(&quot;SH&quot;, &quot;LH&quot;, &quot;HH&quot;), collapse=&quot;|&quot;), datatable$item_condition)] = 2
+   return(standard)
+}
+
+sicdata.swaps = toStandardForm(swaps, &quot;OR&quot;)
+sicdata.diffs = toStandardForm(diffs, &quot;OR&quot;) 
+sicdata.diffs$Subject = sicdata.diffs$Subject+10000
+
+sicdata = rbind(sicdata.swaps, sicdata.diffs)
+sicGroup(sicdata)</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.3 (2020-02-29)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 7 x64 (build 7601) Service Pack 1
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_Australia.1252  LC_CTYPE=English_Australia.1252   
+[3] LC_MONETARY=English_Australia.1252 LC_NUMERIC=C                      
+[5] LC_TIME=English_Australia.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] reshape2_1.4.3    sft_2.2-1         SuppDists_1.1-9.5 fda_5.1.4        
+ [5] Matrix_1.2-18     forcats_0.5.0     stringr_1.4.0     dplyr_0.8.5      
+ [9] purrr_0.3.3       readr_1.3.1       tidyr_1.0.2       tibble_3.0.0     
+[13] ggplot2_3.3.0     tidyverse_1.3.0   workflowr_1.6.1  
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.4       lubridate_1.7.4  lattice_0.20-38  assertthat_0.2.1
+ [5] rprojroot_1.3-2  digest_0.6.25    plyr_1.8.6       R6_2.4.1        
+ [9] cellranger_1.1.0 backports_1.1.5  reprex_0.3.0     evaluate_0.14   
+[13] httr_1.4.1       pillar_1.4.3     rlang_0.4.5      readxl_1.3.1    
+[17] rstudioapi_0.11  whisker_0.4      rmarkdown_2.1    splines_3.6.3   
+[21] munsell_0.5.0    broom_0.5.5      compiler_3.6.3   httpuv_1.5.2    
+[25] modelr_0.1.6     xfun_0.12        pkgconfig_2.0.3  htmltools_0.4.0 
+[29] tidyselect_1.0.0 fansi_0.4.1      crayon_1.3.4     dbplyr_1.4.2    
+[33] withr_2.1.2      later_1.0.0      grid_3.6.3       nlme_3.1-144    
+[37] jsonlite_1.6.1   gtable_0.3.0     lifecycle_0.2.0  DBI_1.1.0       
+[41] git2r_0.26.1     magrittr_1.5     scales_1.1.0     cli_2.0.2       
+[45] stringi_1.4.6    fs_1.4.1         promises_1.1.0   xml2_1.3.0      
+[49] ellipsis_0.3.0   generics_0.0.2   vctrs_0.2.4      tools_3.6.3     
+[53] glue_1.4.0       hms_0.5.3        yaml_2.2.1       colorspace_1.4-1
+[57] rvest_0.3.5      knitr_1.28       haven_2.2.0     </code></pre>
+</div>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using

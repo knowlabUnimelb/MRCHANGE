@@ -11,3 +11,112 @@ editor_options:
 This project is for the SFT analysis of a same-direction and opposite-direction change detection task.
 
 Experimental code is located [here]<code/MRCHANGE_PY>
+
+```{r readdata, echo=TRUE, warning=FALSE, message=FALSE, results="hide"}
+rm(list=ls())
+library(tidyverse)
+library(workflowr)
+library(sft)
+library(reshape2)
+
+## Reading data and variable names 
+#define working directories
+inputdir <- "data"
+
+# list of subject directories storing data files
+fnLoc = c('s1114')
+
+# Column names
+column_file      <- read.csv(paste(inputdir,"data_dictionary.csv",sep="/"), header = TRUE)
+
+fp = file.path(inputdir, fnLoc) # File path 
+
+# Function to merge multiple .dat files
+mergeFiles = function(mypath, colfile){
+  filenames=list.files(path=mypath, full.names=TRUE)
+  datalist = lapply(filenames, function(x){read.table(file=x,header=FALSE, sep=",", col.names=colfile$column, comment.char="#")})
+  bind_rows(datalist, .id = "column_label")
+}
+
+# All data
+data = mergeFiles(fp, column_file)
+# data = data[data$session == 11, ]
+
+# Reorder data by session and trial
+data <- data[order(as.numeric(data$session)), ] 
+
+# Remove timeouts [response ==9's]
+data = data[as.numeric(data$response) != 9, ]
+
+# Split data into same_direction and opposite_direction conditions
+swaps = data[as.numeric(data$condition) == 1, ]
+diffs = data[as.numeric(data$condition) == 2, ]
+
+### JUST FOR SORTING OUT DATA ANALYSIS
+## For 1114, swap response and correct for condition 1, item HH
+swaps$response[grep("HH", swaps$item_condition)] = !swaps$response[grep("HH", swaps$item_condition)]
+swaps$correct[grep("HH", swaps$item_condition)] = !swaps$correct[grep("HH", swaps$item_condition)]
+###
+
+# Accuracy averages for each item
+acc.swaps = aggregate(as.numeric(swaps$correct), by=list(swaps$item_condition), FUN=mean)
+acc.diffs = aggregate(as.numeric(diffs$correct), by=list(diffs$item_condition), FUN=mean)
+
+rt.swaps = aggregate(as.numeric(swaps$rt), by=list(swaps$item_condition), FUN=mean)
+rt.diffs = aggregate(as.numeric(diffs$rt), by=list(diffs$item_condition), FUN=mean)
+
+
+# Extract double targets
+doubletargets = c("HH", "HL", "LH", "LL")
+dt.swaps = swaps[grep(paste(doubletargets, collapse="|"), swaps$item_condition), ]
+dt.diffs = swaps[grep(paste(doubletargets, collapse="|"), diffs$item_condition), ]
+
+# Extract RTs
+data2sic = function(datatable){
+    rt.HH = datatable$rt[trimws(as.character(datatable$item_condition)) == "HH" & datatable$correct == 1]*1000
+    rt.HL = datatable$rt[trimws(as.character(datatable$item_condition)) == "HL" & datatable$correct == 1]*1000
+    rt.LH = datatable$rt[trimws(as.character(datatable$item_condition)) == "LH" & datatable$correct == 1]*1000
+    rt.LL = datatable$rt[trimws(as.character(datatable$item_condition)) == "LL" & datatable$correct == 1]*1000
+   
+    sic(rt.HH, rt.HL, rt.LH, rt.LL)
+ }
+ 
+ sic.swaps = data2sic(dt.swaps)
+ sic.diffs = data2sic(dt.diffs)
+ 
+ # Plot
+ plot(sic.swaps$SIC, do.p=FALSE, ylim=c(-.5,.5))
+ plot(sic.diffs$SIC, do.p=FALSE, ylim=c(-.5,.5))
+
+## Set up data into standard form
+# standard = matrix(data=NA, nrow=nrow(swaps), ncol=ncol(swaps))
+ toStandardForm = function(datatable, condition){
+   standard_mat = matrix(data=NA, nrow=nrow(datatable), ncol=6)
+   colnames(standard_mat) <- c("Subject", "Condition", "RT", "Correct", "Channel1", "Channel2")
+   rownames(standard_mat) <- 1:nrow(datatable)
+   standard <- as.data.frame(standard_mat)
+   
+   standard$Subject = datatable$subject
+   standard$Condition = rep("OR", nrow(standard))
+   standard$RT = datatable$rt*1000
+   standard$Correct = datatable$correct
+   standard$Channel1[grep(paste(c("SS", "SL", "SH"), collapse="|"), datatable$item_condition)] = 0
+   standard$Channel1[grep(paste(c("LS", "LL", "LH"), collapse="|"), datatable$item_condition)] = 1
+   standard$Channel1[grep(paste(c("HS", "HL", "HH"), collapse="|"), datatable$item_condition)] = 2
+   
+   standard$Channel2[grep(paste(c("SS", "LS", "HS"), collapse="|"), datatable$item_condition)] = 0
+   standard$Channel2[grep(paste(c("SL", "LL", "HL"), collapse="|"), datatable$item_condition)] = 1
+   standard$Channel2[grep(paste(c("SH", "LH", "HH"), collapse="|"), datatable$item_condition)] = 2
+   return(standard)
+}
+
+sicdata.swaps = toStandardForm(swaps, "OR")
+sicdata.diffs = toStandardForm(diffs, "OR") 
+sicdata.diffs$Subject = sicdata.diffs$Subject+10000
+
+sicdata = rbind(sicdata.swaps, sicdata.diffs)
+sicGroup(sicdata)
+
+
+```
+
