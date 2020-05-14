@@ -1,0 +1,11 @@
+column,definition
+subject_id,Participant ID
+session,Session Number
+condition,"1 = swaps condition, 2 = difference condition"
+trial_number,Trial numer for this session
+test,test stimulus number
+probe,probe stimulus number
+item_condition,item condition code
+response,"1 = same, 0 = different"
+correct,"1 = correct, 0 = incorrect"
+rt,response time (msec)
