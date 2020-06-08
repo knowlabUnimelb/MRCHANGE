@@ -1,122 +1,546 @@
 ---
-title: "Home"
+title: "Contrast Effects on Architecture in Change Detection"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
-    toc: false
+    toc: true
 editor_options:
   chunk_output_type: console
 ---
 
+David Mussoff, Anthea G. Blunden, and Daniel R. Little
+The University of Melbourne
+
+# Change detection project
+
 This project is for the SFT analysis of a same-direction and opposite-direction change detection task.
 
-Experimental code is located [here]<code/MRCHANGE_PY>
+The background of this study and preregistration is located [here](https://osf.io/e6nfg).
 
-```{r readdata, echo=TRUE, warning=FALSE, message=FALSE, results="hide"}
+
+```{r readdata, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# NOTE: Reference for adjusted rank transform test
+# Leys, C., & Schumann, S. (2010). A nonparametric method to analyze interactions: The adjusted rank transform test. Journal of Experimental Social Psychology, 46, 684-688.
+
+
 rm(list=ls())
 library(tidyverse)
 library(workflowr)
 library(sft)
 library(reshape2)
+library(knitr)
 
 ## Reading data and variable names 
 #define working directories
 inputdir <- "data"
 
 # list of subject directories storing data files
-fnLoc = c('s1114')
+fnLoc = c('s1001', 's1114')
+# NOTE: when you add or remove subjects, you also need to:
+# 1) Add a table to the ks_table section
+# 2) Add the table to the mic_stats_table section
+# 3) Add the table to the sic_stats_table section
+
+
+nsubs = length(fnLoc)
 
 # Column names
 column_file      <- read.csv(paste(inputdir,"data_dictionary.csv",sep="/"), header = TRUE)
 
-fp = file.path(inputdir, fnLoc) # File path 
+for (i in 1:length(fnLoc)){
+   fp = file.path(inputdir, fnLoc) # File path 
 
-# Function to merge multiple .dat files
-mergeFiles = function(mypath, colfile){
-  filenames=list.files(path=mypath, full.names=TRUE)
-  datalist = lapply(filenames, function(x){read.table(file=x,header=FALSE, sep=",", col.names=colfile$column, comment.char="#")})
-  bind_rows(datalist, .id = "column_label")
+   # Function to merge multiple .dat files
+   mergeFiles = function(mypath, colfile){
+      filenames=list.files(path=mypath, full.names=TRUE)
+      datalist = lapply(filenames, function(x){read.table(file=x,header=FALSE, sep=",", col.names=colfile$column, comment.char="#")})
+      bind_rows(datalist, .id = "column_label")
+   }
+
+   # All data
+   data = mergeFiles(fp, column_file)
+   # data = data[data$session == 11, ]
+
+   if (i == 1){
+      alldata = data
+   } else {
+      alldata = rbind(alldata, data)
+   }
 }
-
-# All data
-data = mergeFiles(fp, column_file)
-# data = data[data$session == 11, ]
 
 # Reorder data by session and trial
-data <- data[order(as.numeric(data$session)), ] 
+data <- alldata[order(c(data$subject_id, data$session)), ] 
 
 # Remove timeouts [response ==9's]
-data = data[as.numeric(data$response) != 9, ]
+ntimeouts = sum(data$response == 9)
+data = data[data$response != 9, ]
 
+data$item_condition = factor(trimws(data$item_condition), levels=c("HH", "HL", "LH", "LL", "HS", "LS", "SH", "SL", "SS"))
+
+# Important variables
+t = seq(0, 2, by=.01)
+target_items = c("HH", "HL", "LH", "LL")
+nbootstrap = 1000
+```
+
+# Method
+
+We tested `r nsubs` participants for 10 sessions: 5 sessions in the contrast swaps condition and 5 sessions in the contrast difference condition. One participant (s1114) completed 6 sessions of the contrast swaps condition.
+
+```{r splitdata, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
 # Split data into same_direction and opposite_direction conditions
-swaps = data[as.numeric(data$condition) == 1, ]
-diffs = data[as.numeric(data$condition) == 2, ]
+swaps = data[data$condition == 1, ]
+diffs = data[data$condition == 2, ]
 
-### JUST FOR SORTING OUT DATA ANALYSIS
-## For 1114, swap response and correct for condition 1, item HH
-swaps$response[grep("HH", swaps$item_condition)] = !swaps$response[grep("HH", swaps$item_condition)]
-swaps$correct[grep("HH", swaps$item_condition)] = !swaps$correct[grep("HH", swaps$item_condition)]
-###
+# Trial counts for each item
+n.swaps = aggregate(list('n' = as.numeric(swaps$correct)), by=list("subjects" = swaps$subject_id, "item" = swaps$item_condition), FUN=length)
+n.swaps = n.swaps[order(n.swaps$subjects, n.swaps$item), ]
+
+n.diffs = aggregate(list('n' = as.numeric(diffs$correct)), by=list("subjects" = diffs$subject_id, "item" = diffs$item_condition), FUN=length)
+n.diffs = n.diffs[order(n.diffs$subjects, n.diffs$item), ]
+
+n.count = rbind(spread(n.swaps, item, n), spread(n.diffs, item, n))
+n.count$condition = c(rep("swaps", nsubs), rep("diffs", nsubs))
+n.count = n.count[order(n.count$subjects), ]
+n.count = n.count[, c('subjects', 'condition', 'HH', 'HL', 'LH', 'LL', 'HS', 'LS', 'SH', 'SL', 'SS')]
 
 # Accuracy averages for each item
-acc.swaps = aggregate(as.numeric(swaps$correct), by=list(swaps$item_condition), FUN=mean)
-acc.diffs = aggregate(as.numeric(diffs$correct), by=list(diffs$item_condition), FUN=mean)
+acc.swaps = aggregate(list('accuracy' = as.numeric(swaps$correct)), by=list("subjects" = swaps$subject_id, "item" = swaps$item_condition), FUN=mean)
+acc.swaps = acc.swaps[order(acc.swaps$subjects, acc.swaps$item), ]
+acc.swaps$accuracy = round(acc.swaps$accuracy, 2)
 
-rt.swaps = aggregate(as.numeric(swaps$rt), by=list(swaps$item_condition), FUN=mean)
-rt.diffs = aggregate(as.numeric(diffs$rt), by=list(diffs$item_condition), FUN=mean)
+acc.diffs = aggregate(list('accuracy' = as.numeric(diffs$correct)), by=list("subjects" = diffs$subject_id, "item" = diffs$item_condition), FUN=mean)
+acc.diffs = acc.diffs[order(acc.diffs$subjects, acc.diffs$item), ]
+acc.diffs$accuracy = round(acc.diffs$accuracy, 2)
 
+acc.mean = rbind(spread(acc.swaps, item, accuracy), spread(acc.diffs, item, accuracy))
+acc.mean$condition = c(rep("swaps", nsubs), rep("diffs", nsubs))
+acc.mean = acc.mean[order(acc.mean$subjects), ]
+acc.mean = acc.mean[, c('subjects', 'condition', 'HH', 'HL', 'LH', 'LL', 'HS', 'LS', 'SH', 'SL', 'SS')]
 
-# Extract double targets
-doubletargets = c("HH", "HL", "LH", "LL")
-dt.swaps = swaps[grep(paste(doubletargets, collapse="|"), swaps$item_condition), ]
-dt.diffs = swaps[grep(paste(doubletargets, collapse="|"), diffs$item_condition), ]
+# RT averages
+rt.swaps = aggregate(list('rt' = swaps$rt[swaps$correct == 1]), by=list("subjects" = swaps$subject_id[swaps$correct == 1], "item" = swaps$item_condition[swaps$correct == 1]), FUN=mean)
+rt.swaps = rt.swaps[order(rt.swaps$subjects, rt.swaps$item), ]
+rt.swaps$rt = round(rt.swaps$rt, 3)
 
-# Extract RTs
-data2sic = function(datatable){
-    rt.HH = datatable$rt[trimws(as.character(datatable$item_condition)) == "HH" & datatable$correct == 1]*1000
-    rt.HL = datatable$rt[trimws(as.character(datatable$item_condition)) == "HL" & datatable$correct == 1]*1000
-    rt.LH = datatable$rt[trimws(as.character(datatable$item_condition)) == "LH" & datatable$correct == 1]*1000
-    rt.LL = datatable$rt[trimws(as.character(datatable$item_condition)) == "LL" & datatable$correct == 1]*1000
+rt.diffs = aggregate(list('rt' = diffs$rt[swaps$correct == 1]), by=list("subjects" = diffs$subject_id[swaps$correct == 1], "item" = diffs$item_condition[swaps$correct == 1]), FUN=mean)
+rt.diffs = rt.diffs[order(rt.diffs$subjects, rt.diffs$item), ]
+rt.diffs$rt = round(rt.diffs$rt, 3)
+
+rt.swaps.se = aggregate(list('sterr' = swaps$rt[swaps$correct == 1]), by=list("subjects" = swaps$subject_id[swaps$correct == 1], "item" = swaps$item_condition[swaps$correct == 1]), FUN=function(x)sd(x)/sqrt(length(x)))
+rt.swaps.se = rt.swaps.se[order(rt.swaps.se$subjects, rt.swaps.se$item), ]
+rt.swaps.se$sterr = round(rt.swaps.se$sterr, 5)
+
+rt.diffs = aggregate(list('rt' = diffs$rt[swaps$correct == 1]), by=list("subjects" = diffs$subject_id[swaps$correct == 1], "item" = diffs$item_condition[swaps$correct == 1]), FUN=mean)
+rt.diffs = rt.diffs[order(rt.diffs$subjects, rt.diffs$item), ]
+rt.diffs$rt = round(rt.diffs$rt, 3)
+
+rt.diffs.se = aggregate(list('sterr' = diffs$rt[diffs$correct == 1]), by=list("subjects" = diffs$subject_id[diffs$correct == 1], "item" = diffs$item_condition[diffs$correct == 1]), FUN=function(x)sd(x)/sqrt(length(x)))
+rt.diffs.se = rt.diffs.se[order(rt.diffs.se$subjects, rt.diffs.se$item), ]
+rt.diffs.se$sterr = round(rt.diffs.se$sterr, 5)
+
+rt.mean = rbind(spread(rt.swaps, item, rt), spread(rt.diffs, item, rt))
+rt.mean$condition = c(rep("swaps", nsubs), rep("diffs", nsubs))
+rt.mean = rt.mean[order(rt.mean$subjects), ]
+rt.mean = rt.mean[, c('subjects', 'condition', 'HH', 'HL', 'LH', 'LL', 'HS', 'LS', 'SH', 'SL', 'SS')]
+
+# Error RT averages
+ert.swaps = aggregate(list('rt' = swaps$rt[swaps$correct == 0]), by=list("subjects" = swaps$subject_id[swaps$correct == 0], "item" = swaps$item_condition[swaps$correct == 0]), FUN=mean)
+ert.swaps = ert.swaps[order(ert.swaps$subjects, ert.swaps$item), ]
+ert.swaps$rt = round(ert.swaps$rt, 3)
+
+ert.diffs = aggregate(list('rt' = diffs$rt[swaps$correct == 0]), by=list("subjects" = diffs$subject_id[swaps$correct == 0], "item" = diffs$item_condition[swaps$correct == 0]), FUN=mean)
+ert.diffs = ert.diffs[order(ert.diffs$subjects, ert.diffs$item), ]
+ert.diffs$rt = round(ert.diffs$rt, 3)
+
+ert.mean = rbind(spread(ert.swaps, item, rt), spread(ert.diffs, item, rt))
+ert.mean$condition = c(rep("swaps", nsubs), rep("diffs", nsubs))
+ert.mean = ert.mean[order(ert.mean$subjects), ]
+ert.mean = ert.mean[, c('subjects', 'condition', 'HH', 'HL', 'LH', 'LL', 'HS', 'LS', 'SH', 'SL', 'SS')]
+
+```
+
+# Mean accuracy and response time for each item condition
+
+We computed the mean accuracy and response time for each item in each condition.
+
+```{r summary_table, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+kable(n.count, caption = "Trial Counts for each Item in Each Condition")
+kable(acc.mean, caption = "Mean Accuracy for each Item in Each Condition")
+kable(rt.mean, caption = "Mean Correct RT (sec) for each Item in Each Condition")
+kable(ert.mean, caption = "Mean Error RT (sec) for each Item in Each Condition")
+```
+
+# Mean Interaction Contrasts
+
+We plotted the double target items as a function of the discriminability in each location.
+
+```{r plot_target_means, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+
+# Build data frame for plotting
+s = cbind(rt.swaps[rt.swaps$item %in% target_items, ], "se" = rt.swaps.se$sterr[rt.swaps$item %in% target_items])
+d = cbind(rt.diffs[rt.diffs$item %in% target_items, ], "se" = rt.diffs.se$sterr[rt.diffs$item %in% target_items])
+
+s$condition = rep("swaps", nrow(s))
+d$condition = rep("diffs", nrow(d))
+
+s$d1 = substr(as.character(s$item), 1, 1)
+s$d2 = substr(as.character(s$item), 2, 2)
+
+d$d1 = substr(as.character(d$item), 1, 1)
+d$d2 = substr(as.character(d$item), 2, 2)
+
+df = rbind(s,d)
+df$condition = as.factor(df$condition)
+levels(df$condition) = c("swaps", "diffs")
+
+# Default line plot
+p <- ggplot(df, aes(x=d1, y=rt, group=d2)) + 
+     geom_line(size = 1, aes(linetype=d2)) +
+     geom_point(colour="black", size = 3, aes(fill=d2))+
+     geom_errorbar(aes(ymin=rt-se, ymax=rt+se), width=.2)+
+     facet_wrap(~subjects+condition)
+
+# Finished line plot
+p = p+labs(title="Mean Response Times", x="Left Target", y = "RT (sec)")+
+    scale_linetype_discrete(name  ="Right Target",
+                         breaks=c("H", "L"),
+                         labels=c("H", "L")) +
+    scale_fill_discrete(name  ="Right Target",
+                         breaks=c("H", "L"),
+                         labels=c("H", "L"))
    
-    sic(rt.HH, rt.HL, rt.LH, rt.LL)
- }
- 
- sic.swaps = data2sic(dt.swaps)
- sic.diffs = data2sic(dt.diffs)
- 
- # Plot
- plot(sic.swaps$SIC, do.p=FALSE, ylim=c(-.5,.5))
- plot(sic.diffs$SIC, do.p=FALSE, ylim=c(-.5,.5))
+print(p)
 
-## Set up data into standard form
-# standard = matrix(data=NA, nrow=nrow(swaps), ncol=ncol(swaps))
- toStandardForm = function(datatable, condition){
-   standard_mat = matrix(data=NA, nrow=nrow(datatable), ncol=6)
-   colnames(standard_mat) <- c("Subject", "Condition", "RT", "Correct", "Channel1", "Channel2")
-   rownames(standard_mat) <- 1:nrow(datatable)
-   standard <- as.data.frame(standard_mat)
-   
-   standard$Subject = datatable$subject
-   standard$Condition = rep("OR", nrow(standard))
-   standard$RT = datatable$rt*1000
-   standard$Correct = datatable$correct
-   standard$Channel1[grep(paste(c("SS", "SL", "SH"), collapse="|"), datatable$item_condition)] = 0
-   standard$Channel1[grep(paste(c("LS", "LL", "LH"), collapse="|"), datatable$item_condition)] = 1
-   standard$Channel1[grep(paste(c("HS", "HL", "HH"), collapse="|"), datatable$item_condition)] = 2
-   
-   standard$Channel2[grep(paste(c("SS", "LS", "HS"), collapse="|"), datatable$item_condition)] = 0
-   standard$Channel2[grep(paste(c("SL", "LL", "HL"), collapse="|"), datatable$item_condition)] = 1
-   standard$Channel2[grep(paste(c("SH", "LH", "HH"), collapse="|"), datatable$item_condition)] = 2
-   return(standard)
+```
+
+```{r survivors, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+subs = as.integer(substring(fnLoc, 2))
+
+for (i in 1:nsubs){
+   for (j in 1:length(target_items)){
+      varname <- paste(fnLoc[i], "swaps", target_items[j], sep = ".")
+      assign(varname, swaps$rt[swaps$subject_id == subs[i] & swaps$correct == 1 & swaps$item_condition %in% target_items[j]])
+      evn <- paste('cdf', varname, sep='.')
+      assign(evn, ecdf(eval(parse(text=varname))))
+      
+      
+      varname <- paste(fnLoc[i], "diffs", target_items[j], sep = ".")
+      assign(varname, diffs$rt[diffs$subject_id == subs[i] & diffs$correct == 1 & diffs$item_condition %in% target_items[j]])
+      evn <- paste('cdf', varname, sep='.')
+      assign(evn, ecdf(eval(parse(text=varname))))
+   }
+}
+# Creates a series of functions names s1001.swaps.HH, s1001.diffs.HL, etc which are used to return a cdf by: s1001.swaps.HH(t)
+```
+
+```{r compute_sic, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+for (i in 1:nsubs){
+   for (j in 1:length(target_items)){
+      assignment <- paste("swaps.", target_items[j], '=', paste(fnLoc[i], "swaps", target_items[j], sep = "."), sep="")
+      eval(parse(text=assignment))
+      
+      
+      assignment <- paste("diffs.", target_items[j], '=', paste(fnLoc[i], "diffs", target_items[j], sep = "."), sep="")
+      eval(parse(text=assignment))
+   }
+   varname <- paste('sic', fnLoc[i], "swaps", sep = ".")
+   assign(varname, sic(HH=swaps.HH, HL=swaps.HL, LH=swaps.LH, LL=swaps.LL))
+   varname <- paste('sic', fnLoc[i], "diffs", sep = ".")   
+   assign(varname, sic(HH=diffs.HH, HL=diffs.HL, LH=diffs.LH, LL=diffs.LL))
 }
 
-sicdata.swaps = toStandardForm(swaps, "OR")
-sicdata.diffs = toStandardForm(diffs, "OR") 
-sicdata.diffs$Subject = sicdata.diffs$Subject+10000
+```
 
-sicdata = rbind(sicdata.swaps, sicdata.diffs)
-sicGroup(sicdata)
+We tested the interaction between the discriminability of the left target and right target using an adjusted rank transform test.
+
+```{r mic_stats, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+
+get_mic <- function(x){
+   mic = x[4]-x[3]-x[2]+x[1]
+   return(mic)
+} 
+
+mic_test_table = 
+   rbind(cbind("stat" = round(sic.s1001.swaps$MICtest$statistic,2), "p" = round(sic.s1001.swaps$MICtest$p.value,4)),
+         cbind("stat" = round(sic.s1001.diffs$MICtest$statistic,2), "p" = round(sic.s1001.diffs$MICtest$p.value,4)))
+
+rownames(mic_test_table) = NULL
+mic_test_table.s1001 = as.data.frame(mic_test_table)
+mic_test_table.s1001$condition = c("swaps", "diffs")
+mic_test_table.s1001$mic = c(get_mic(rt.swaps$rt[rt.swaps$subjects ==  1001 & rt.swaps$item %in% target_items]),
+                             get_mic(rt.diffs$rt[rt.swaps$subjects ==  1001 & rt.diffs$item %in% target_items]))
+mic_test_table.s1001 = mic_test_table.s1001[c("condition", "mic", "stat", "p")]
+
+kable(mic_test_table.s1001, caption = "Subject 1001: Adjusted Rank Transform test of the MIC")
+   
+
+mic_test_table = 
+   rbind(cbind("stat" = round(sic.s1114.swaps$MICtest$statistic,2), "p" = round(sic.s1114.swaps$MICtest$p.value,4)),
+         cbind("stat" = round(sic.s1114.diffs$MICtest$statistic,2), "p" = round(sic.s1114.diffs$MICtest$p.value,4)))
+
+rownames(mic_test_table) = NULL
+mic_test_table.s1114 = as.data.frame(mic_test_table)
+mic_test_table.s1114$condition = c("swaps", "diffs")
+mic_test_table.s1114$mic = c(get_mic(rt.swaps$rt[rt.swaps$subjects ==  1114 & rt.swaps$item %in% target_items]),
+                             get_mic(rt.diffs$rt[rt.swaps$subjects ==  1114 & rt.diffs$item %in% target_items]))
+mic_test_table.s1114 = mic_test_table.s1114[c("condition", "mic", "stat", "p")]
+
+kable(mic_test_table.s1114, caption = "Subject 1114: Adjusted Rank Transform test of the MIC")
+
+```
+
+# Test of stochastic dominance
+
+We tested the ordering of the survivor functions using a series of Kolmogorov-Smirnoff test. If stochastic dominance is preserved, then we expect the first four tests to be significant while the second four tests are not.
+
+```{r Splot, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+cols = c("red", "red", "blue", "blue")
+ltys = c(1, 2, 1, 2)
+
+par(mfrow=c(nsubs,2)) 
+
+for (i in 1:nsubs){
+   # Plot swaps condition
+   for (j in 1:length(target_items)){
+      varname <- paste('cdf', fnLoc[i], "swaps", target_items[j], sep = ".")
+      ft = 1-eval(parse(text=paste(varname, "(t)", sep="")))
+      if (j == 1){
+         plot(t, ft, type="l", col=cols[j], lwd=2, lty = ltys[j], xlab="t (sec)", ylab="X=S(t)")
+      } else {
+         lines(t, ft, type="l", col=cols[j], lwd=2, lty = ltys[j])
+      }
+   }
+   title(paste(fnLoc[i], ": Contrast Swaps", sep=""))
+   legend(1.5, 1, legend=c("HH", "HL", "LH", "LL"), lwd=2, col=cols, lty=ltys, cex=0.8)
+
+   # Plot diffs condition
+   for (j in 1:length(target_items)){
+      varname <- paste('cdf', fnLoc[i], "diffs", target_items[j], sep = ".")
+      ft = 1-eval(parse(text=paste(varname, "(t)", sep="")))
+      if (j == 1){
+         plot(t, ft, type="l", col=cols[j], lwd=2, lty = ltys[j], xlab="t (sec)", ylab="X=S(t)")
+      } else {
+         lines(t, ft, type="l", col=cols[j], lwd=2, lty = ltys[j])
+      }
+   }
+   title(paste(fnLoc[i], ": Contrast Differences", sep=""))
+   legend(1.5, 1, legend=c("HH", "HL", "LH", "LL"), lwd=2, col=cols, lty=ltys, cex=0.8)
+}
+
+```
+
+```{r ks_table, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+ksrows = as.data.frame(eval(parse(text=paste("sic.", fnLoc[1], ".swaps$Dominance$Test", sep=""))))
+ks = vector(mode = "list", length = nsubs)
+for (i in 1:nsubs){
+   kstable = cbind(ksrows, 
+                   round(eval(parse(text=paste("sic.", fnLoc[i], ".swaps$Dominance$statistic", sep=""))), 3),
+                   round(eval(parse(text=paste("sic.", fnLoc[i], ".swaps$Dominance$p.value", sep=""))), 3),
+                   round(eval(parse(text=paste("sic.", fnLoc[i], ".diffs$Dominance$statistic", sep=""))), 3),
+                   round(eval(parse(text=paste("sic.", fnLoc[i], ".diffs$Dominance$p.value", sep=""))), 3))
+   names(kstable) = c("Test", "ks.swaps", "p.swaps", "ks.diffs", "p.diffs")
+   ks[[i]] = kstable
+}
+
+# Note: duplicate this line for each subject
+kable(ks[[1]], caption = paste("Stochastic Dominance tests for subject", fnLoc[1]))
+kable(ks[[2]], caption = paste("Stochastic Dominance tests for subject", fnLoc[2]))
+
+```
+
+# Survivor Interaction Contrasts
+
+```{r bootstrap_sic, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+
+sicbootstrap <- function(HH, HL, LH, LL, t, nbootstrap){
+# sicbootstrap returns a bootstrapped sample from the 4 data vectors:
+# HH, HL, LH, and LL to compute std_boot, which is the std. confidence interval for SIC(t)
+# You can choose other C.I. using percentiles (e.g., 90%)
+#
+# Ami Eidels, AMPC 2011
+
+# n iterations of resmapling
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  sic_boot = matrix(NA, nrow=nbootstrap,ncol=length(t))
+  for (n in 1:nbootstrap){
+        HH_boot = sample(HH, length(HH), replace=TRUE)
+        HL_boot = sample(HL, length(HL), replace=TRUE)
+        LH_boot = sample(LH, length(LH), replace=TRUE)
+        LL_boot = sample(LL, length(LL), replace=TRUE)
+
+        Shh_boot = 1-ecdf(HH_boot)(t)
+        Shl_boot = 1-ecdf(HL_boot)(t)
+        Slh_boot = 1-ecdf(LH_boot)(t)
+        Sll_boot = 1-ecdf(LL_boot)(t)
+
+        sic_boot[n, ] = Shh_boot - Shl_boot - Slh_boot + Sll_boot
+
+  }
+
+   std_boot = apply(sic_boot, 2, FUN=sd)
+   return(std_boot)
+}
+
+for (i in 1:nsubs){
+      outname <- paste(fnLoc[i], "swaps", "sic.std", sep = ".")
+      hh <- eval(parse(text=paste(fnLoc[i], "swaps", "HH", sep = ".")))
+      hl <- eval(parse(text=paste(fnLoc[i], "swaps", "HL", sep = ".")))
+      lh <- eval(parse(text=paste(fnLoc[i], "swaps", "LH", sep = ".")))
+      ll <- eval(parse(text=paste(fnLoc[i], "swaps", "LL", sep = ".")))
+      
+      assign(outname, sicbootstrap(hh, hl, lh, ll, t, nbootstrap))
+
+      outname <- paste(fnLoc[i], "diffs", "sic.std", sep = ".")
+      hh <- eval(parse(text=paste(fnLoc[i], "diffs", "HH", sep = ".")))
+      hl <- eval(parse(text=paste(fnLoc[i], "diffs", "HL", sep = ".")))
+      lh <- eval(parse(text=paste(fnLoc[i], "diffs", "LH", sep = ".")))
+      ll <- eval(parse(text=paste(fnLoc[i], "diffs", "LL", sep = ".")))
+      
+      assign(outname, sicbootstrap(hh, hl, lh, ll, t, nbootstrap))
+}
+
+```
+
+We tested the architecture underlying change detection decision using the survivor interaction contrast.
+
+```{r sic_plot, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+# Build data file for ggplot
+# subject, condition, t, sic
+
+con1   = rep(1, length(t))
+con2   = rep(2, length(t))
+concol = c(con1, con2)
+
+tcol = c(t,t)
+
+for (i in 1:nsubs){
+   # Plot swaps condition
+   varname <- paste(paste('sic', fnLoc[i], "swaps", sep = "."), "SIC", sep = "$")
+   sic1 = eval(parse(text=paste(varname, "(t)", sep="")))
+   sic1lo = sic1 - 2*eval(parse(text=paste(fnLoc[i], "swaps", "sic.std", sep=".")))
+   sic1hi = sic1 + 2*eval(parse(text=paste(fnLoc[i], "swaps", "sic.std", sep=".")))
+   
+   varname <- paste(paste('sic', fnLoc[i], "diffs", sep = "."), "SIC", sep = "$")
+   sic2 = eval(parse(text=paste(varname, "(t)", sep="")))
+   sic2lo = sic2 - 2*eval(parse(text=paste(fnLoc[i], "diffs", "sic.std", sep=".")))
+   sic2hi = sic2 + 2*eval(parse(text=paste(fnLoc[i], "diffs", "sic.std", sep=".")))
+
+   siccol = c(as.array(sic1), as.array(sic2))
+   siclocol = c(as.array(sic1lo), as.array(sic2lo))
+   sichicol = c(as.array(sic1hi), as.array(sic2hi))
+   
+   subcol = rep(subs[i], length(tcol))
+   
+   if (i == 1){
+      sic.plot.data = as.data.frame(cbind("subject" = subcol, "condition" = concol, "t" = tcol, "SIC" = siccol, "SIClo" = siclocol, "SIChi" = sichicol))      
+   } else {
+      newsub = as.data.frame(cbind("subject" = subcol, "condition" = concol, "t" = t, "SIC" = siccol, "SIClo" = siclocol, "SIChi" = sichicol))                  
+      sic.plot.data = rbind(sic.plot.data, newsub)
+   }
+}
+
+sic.plot.data$condition = as.factor(sic.plot.data$condition)
+levels(sic.plot.data$condition) = c("swaps", "diffs")
+#sic.plot.data$condition[sic.plot.data$condition == 1] = "swaps"
+#sic.plot.data$condition[sic.plot.data$condition == 2] = "diffs"
+
+ggplot(data=sic.plot.data, aes(x=t, y=SIC)) +
+  geom_ribbon(aes(ymin=SIClo, ymax=SIChi), fill="steelblue2", color="steelblue2") + 
+  geom_line(color="red")+
+  facet_wrap(~subject+condition) +
+  ggtitle('Survivor Interaction Contrasts')
 
 
 ```
+We tested the significance of the positive and negative SIC regions using the Houpt-Townsend D+ and D- statistics.
+
+```{r sic_stats_table, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+
+sic_test_table = 
+   rbind(cbind("stat" = round(sic.s1001.swaps$SICtest$positive$statistic,2), "p" = round(sic.s1001.swaps$SICtest$positive$p.value,2)),
+         cbind("stat" = round(sic.s1001.swaps$SICtest$negative$statistic,2), "p" = round(sic.s1001.swaps$SICtest$negative$p.value,2)),
+         cbind("stat" = round(sic.s1001.diffs$SICtest$positive$statistic,2), "p" = round(sic.s1001.diffs$SICtest$positive$p.value,2)),
+         cbind("stat" = round(sic.s1001.diffs$SICtest$negative$statistic,2), "p" = round(sic.s1001.diffs$SICtest$negative$p.value,2)))
+
+rownames(sic_test_table) = NULL
+sic_test_table.s1001 = as.data.frame(sic_test_table)
+sic_test_table.s1001$condition = c("swaps", "swaps", "diffs", "diffs")
+sic_test_table.s1001$test = c("D+", "D-", "D+", "D-")
+sic_test_table.s1001 = sic_test_table.s1001[c("condition", "test", "stat", "p")]
+
+kable(sic_test_table.s1001, caption = "SIC tests for subject 1001")
+   
+
+sic_test_table = 
+   rbind(cbind("stat" = round(sic.s1114.swaps$SICtest$positive$statistic,2), "p" = round(sic.s1114.swaps$SICtest$positive$p.value,2)),
+         cbind("stat" = round(sic.s1114.swaps$SICtest$negative$statistic,2), "p" = round(sic.s1114.swaps$SICtest$negative$p.value,2)),
+         cbind("stat" = round(sic.s1114.swaps$SICtest$positive$statistic,2), "p" = round(sic.s1114.swaps$SICtest$positive$p.value,2)),
+         cbind("stat" = round(sic.s1114.swaps$SICtest$negative$statistic,2), "p" = round(sic.s1114.swaps$SICtest$negative$p.value,2)))
+
+rownames(sic_test_table) = NULL
+sic_test_table.s1114 = as.data.frame(sic_test_table)
+sic_test_table.s1114$condition = c("swaps", "swaps", "diffs", "diffs")
+sic_test_table.s1114$test = c("D+", "D-", "D+", "D-")
+sic_test_table.s1114 = sic_test_table.s1114[c("condition", "test", "stat", "p")]
+kable(sic_test_table.s1114, caption = "SIC tests for subject 1114")
+
+
+```
+
+```{r sic_group_code, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# # Extract double targets
+# doubletargets = c("HH", "HL", "LH", "LL")
+# dt.swaps = swaps[grep(paste(doubletargets, collapse="|"), swaps$item_condition), ]
+# dt.diffs = swaps[grep(paste(doubletargets, collapse="|"), diffs$item_condition), ]
+# 
+# # Extract RTs
+# data2sic = function(datatable){
+#     rt.HH = datatable$rt[trimws(as.character(datatable$item_condition)) == "HH" & datatable$correct == 1]*1000
+#     rt.HL = datatable$rt[trimws(as.character(datatable$item_condition)) == "HL" & datatable$correct == 1]*1000
+#     rt.LH = datatable$rt[trimws(as.character(datatable$item_condition)) == "LH" & datatable$correct == 1]*1000
+#     rt.LL = datatable$rt[trimws(as.character(datatable$item_condition)) == "LL" & datatable$correct == 1]*1000
+#    
+#     sic(rt.HH, rt.HL, rt.LH, rt.LL)
+#  }
+#  
+#  sic.swaps = data2sic(dt.swaps)
+#  sic.diffs = data2sic(dt.diffs)
+#  
+#  # Plot
+#  plot(sic.swaps$SIC, do.p=FALSE, ylim=c(-.5,.5))
+#  plot(sic.diffs$SIC, do.p=FALSE, ylim=c(-.5,.5))
+# 
+# ## Set up data into standard form
+# # standard = matrix(data=NA, nrow=nrow(swaps), ncol=ncol(swaps))
+#  toStandardForm = function(datatable, condition){
+#    standard_mat = matrix(data=NA, nrow=nrow(datatable), ncol=6)
+#    colnames(standard_mat) <- c("Subject", "Condition", "RT", "Correct", "Channel1", "Channel2")
+#    rownames(standard_mat) <- 1:nrow(datatable)
+#    standard <- as.data.frame(standard_mat)
+#    
+#    standard$Subject = datatable$subject
+#    standard$Condition = rep("OR", nrow(standard))
+#    standard$RT = datatable$rt*1000
+#    standard$Correct = datatable$correct
+#    standard$Channel1[grep(paste(c("SS", "SL", "SH"), collapse="|"), datatable$item_condition)] = 0
+#    standard$Channel1[grep(paste(c("LS", "LL", "LH"), collapse="|"), datatable$item_condition)] = 1
+#    standard$Channel1[grep(paste(c("HS", "HL", "HH"), collapse="|"), datatable$item_condition)] = 2
+#    
+#    standard$Channel2[grep(paste(c("SS", "LS", "HS"), collapse="|"), datatable$item_condition)] = 0
+#    standard$Channel2[grep(paste(c("SL", "LL", "HL"), collapse="|"), datatable$item_condition)] = 1
+#    standard$Channel2[grep(paste(c("SH", "LH", "HH"), collapse="|"), datatable$item_condition)] = 2
+#    return(standard)
+# }
+# 
+# sicdata.swaps = toStandardForm(swaps, "OR")
+# sicdata.diffs = toStandardForm(diffs, "OR") 
+# sicdata.diffs$Subject = sicdata.diffs$Subject+10000
+# 
+# sicdata = rbind(sicdata.swaps, sicdata.diffs)
+# sic.results = sicGroup(sicdata)
+
+
+```
+
 
