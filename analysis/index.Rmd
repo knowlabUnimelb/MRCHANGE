@@ -35,7 +35,8 @@ library(knitr)
 inputdir <- "data"
 
 # list of subject directories storing data files
-fnLoc = c('s1001', 's1114')
+fnLoc = c('s1001', 's1114', 's1024', 's1911', 's2222')
+
 # NOTE: when you add or remove subjects, you also need to:
 # 1) Add a table to the ks_table section
 # 2) Add the table to the mic_stats_table section
@@ -69,7 +70,8 @@ for (i in 1:length(fnLoc)){
 }
 
 # Reorder data by session and trial
-data <- alldata[order(c(data$subject_id, data$session)), ] 
+# data <- alldata[order(cbind(alldata$subject_id, alldata$session, alldata$trial_number)), ] 
+data <- alldata[with(alldata, order(subject_id, session )), ]
 
 # Remove timeouts [response ==9's]
 ntimeouts = sum(data$response == 9)
@@ -81,6 +83,15 @@ data$item_condition = factor(trimws(data$item_condition), levels=c("HH", "HL", "
 t = seq(0, 2, by=.01)
 target_items = c("HH", "HL", "LH", "LL")
 nbootstrap = 1000
+
+# Check accuracy by session
+bonusCutoff = .9
+sessionAcc = aggregate(list('acc' = as.numeric(data$correct)), by=list("session" = data$session, 'sub_id' = data$subject_id), FUN=mean)
+sessionAcc$cuttoff = sessionAcc$acc >= bonusCutoff
+sessionAcc$bonusPerSession = sessionAcc$cuttoff * 3
+
+bonusAmount = aggregate(list('amt' = sessionAcc$bonusPerSession), by = list('sub_id' = sessionAcc$sub_id), FUN=sum)
+
 ```
 
 # Method
@@ -148,6 +159,10 @@ rt.mean = rt.mean[, c('subjects', 'condition', 'HH', 'HL', 'LH', 'LL', 'HS', 'LS
 ert.swaps = aggregate(list('rt' = swaps$rt[swaps$correct == 0]), by=list("subjects" = swaps$subject_id[swaps$correct == 0], "item" = swaps$item_condition[swaps$correct == 0]), FUN=mean)
 ert.swaps = ert.swaps[order(ert.swaps$subjects, ert.swaps$item), ]
 ert.swaps$rt = round(ert.swaps$rt, 3)
+#if nrow(ert.swaps != 9){ 
+#   
+#   
+#}
 
 ert.diffs = aggregate(list('rt' = diffs$rt[swaps$correct == 0]), by=list("subjects" = diffs$subject_id[swaps$correct == 0], "item" = diffs$item_condition[swaps$correct == 0]), FUN=mean)
 ert.diffs = ert.diffs[order(ert.diffs$subjects, ert.diffs$item), ]
@@ -199,7 +214,7 @@ p <- ggplot(df, aes(x=d1, y=rt, group=d2)) +
      geom_line(size = 1, aes(linetype=d2)) +
      geom_point(colour="black", size = 3, aes(fill=d2))+
      geom_errorbar(aes(ymin=rt-se, ymax=rt+se), width=.2)+
-     facet_wrap(~subjects+condition)
+     facet_wrap(~subjects+condition, nrow=nsubs)
 
 # Finished line plot
 p = p+labs(title="Mean Response Times", x="Left Target", y = "RT (sec)")+
@@ -215,8 +230,8 @@ print(p)
 ```
 
 ```{r survivors, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
-subs = as.integer(substring(fnLoc, 2))
-
+#subs = as.integer(substring(fnLoc, 2))
+subs = unique(data$subject_id)
 for (i in 1:nsubs){
    for (j in 1:length(target_items)){
       varname <- paste(fnLoc[i], "swaps", target_items[j], sep = ".")
@@ -261,6 +276,8 @@ get_mic <- function(x){
    return(mic)
 } 
 
+
+##
 mic_test_table = 
    rbind(cbind("stat" = round(sic.s1001.swaps$MICtest$statistic,2), "p" = round(sic.s1001.swaps$MICtest$p.value,4)),
          cbind("stat" = round(sic.s1001.diffs$MICtest$statistic,2), "p" = round(sic.s1001.diffs$MICtest$p.value,4)))
@@ -274,7 +291,7 @@ mic_test_table.s1001 = mic_test_table.s1001[c("condition", "mic", "stat", "p")]
 
 kable(mic_test_table.s1001, caption = "Subject 1001: Adjusted Rank Transform test of the MIC")
    
-
+##
 mic_test_table = 
    rbind(cbind("stat" = round(sic.s1114.swaps$MICtest$statistic,2), "p" = round(sic.s1114.swaps$MICtest$p.value,4)),
          cbind("stat" = round(sic.s1114.diffs$MICtest$statistic,2), "p" = round(sic.s1114.diffs$MICtest$p.value,4)))
@@ -288,6 +305,48 @@ mic_test_table.s1114 = mic_test_table.s1114[c("condition", "mic", "stat", "p")]
 
 kable(mic_test_table.s1114, caption = "Subject 1114: Adjusted Rank Transform test of the MIC")
 
+##
+mic_test_table = 
+   rbind(cbind("stat" = round(sic.s1024.swaps$MICtest$statistic,2), "p" = round(sic.s1024.swaps$MICtest$p.value,4)),
+         cbind("stat" = round(sic.s1024.diffs$MICtest$statistic,2), "p" = round(sic.s1024.diffs$MICtest$p.value,4)))
+
+rownames(mic_test_table) = NULL
+mic_test_table.s1024 = as.data.frame(mic_test_table)
+mic_test_table.s1024$condition = c("swaps", "diffs")
+mic_test_table.s1024$mic = c(get_mic(rt.swaps$rt[rt.swaps$subjects ==  24 & rt.swaps$item %in% target_items]),
+                             get_mic(rt.diffs$rt[rt.swaps$subjects ==  24 & rt.diffs$item %in% target_items]))
+mic_test_table.s1024 = mic_test_table.s1024[c("condition", "mic", "stat", "p")]
+
+kable(mic_test_table.s1024, caption = "Subject 1024: Adjusted Rank Transform test of the MIC")
+
+##
+mic_test_table = 
+   rbind(cbind("stat" = round(sic.s1911.swaps$MICtest$statistic,2), "p" = round(sic.s1911.swaps$MICtest$p.value,4)),
+         cbind("stat" = round(sic.s1911.diffs$MICtest$statistic,2), "p" = round(sic.s1911.diffs$MICtest$p.value,4)))
+
+rownames(mic_test_table) = NULL
+mic_test_table.s1911 = as.data.frame(mic_test_table)
+mic_test_table.s1911$condition = c("swaps", "diffs")
+mic_test_table.s1911$mic = c(get_mic(rt.swaps$rt[rt.swaps$subjects == 911 & rt.swaps$item %in% target_items]),
+                             get_mic(rt.diffs$rt[rt.swaps$subjects == 911 & rt.diffs$item %in% target_items]))
+mic_test_table.s1911 = mic_test_table.s1911[c("condition", "mic", "stat", "p")]
+
+kable(mic_test_table.s1911, caption = "Subject 1911: Adjusted Rank Transform test of the MIC")
+
+##
+mic_test_table = 
+   rbind(cbind("stat" = round(sic.s2222.swaps$MICtest$statistic,2), "p" = round(sic.s2222.swaps$MICtest$p.value,4)),
+         cbind("stat" = round(sic.s2222.diffs$MICtest$statistic,2), "p" = round(sic.s2222.diffs$MICtest$p.value,4)))
+
+rownames(mic_test_table) = NULL
+mic_test_table.s2222 = as.data.frame(mic_test_table)
+mic_test_table.s2222$condition = c("swaps", "diffs")
+mic_test_table.s2222$mic = c(get_mic(rt.swaps$rt[rt.swaps$subjects == 2222 & rt.swaps$item %in% target_items]),
+                             get_mic(rt.diffs$rt[rt.swaps$subjects == 2222 & rt.diffs$item %in% target_items]))
+mic_test_table.s2222 = mic_test_table.s2222[c("condition", "mic", "stat", "p")]
+
+kable(mic_test_table.s2222, caption = "Subject 2222: Adjusted Rank Transform test of the MIC")
+
 ```
 
 # Test of stochastic dominance
@@ -296,8 +355,11 @@ We tested the ordering of the survivor functions using a series of Kolmogorov-Sm
 
 ```{r Splot, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
 cols = c("red", "red", "blue", "blue")
-ltys = c(1, 2, 1, 2)
+ltys = c(1, 2, 2, 1)
 
+
+ par("mar")
+ par(mar=c(1,1,1,1))
 par(mfrow=c(nsubs,2)) 
 
 for (i in 1:nsubs){
@@ -346,6 +408,9 @@ for (i in 1:nsubs){
 # Note: duplicate this line for each subject
 kable(ks[[1]], caption = paste("Stochastic Dominance tests for subject", fnLoc[1]))
 kable(ks[[2]], caption = paste("Stochastic Dominance tests for subject", fnLoc[2]))
+kable(ks[[3]], caption = paste("Stochastic Dominance tests for subject", fnLoc[3]))
+kable(ks[[4]], caption = paste("Stochastic Dominance tests for subject", fnLoc[4]))
+kable(ks[[5]], caption = paste("Stochastic Dominance tests for subject", fnLoc[5]))
 
 ```
 
@@ -445,13 +510,13 @@ levels(sic.plot.data$condition) = c("swaps", "diffs")
 #sic.plot.data$condition[sic.plot.data$condition == 1] = "swaps"
 #sic.plot.data$condition[sic.plot.data$condition == 2] = "diffs"
 
-ggplot(data=sic.plot.data, aes(x=t, y=SIC)) +
+sicp = ggplot(data=sic.plot.data, aes(x=t, y=SIC)) +
   geom_ribbon(aes(ymin=SIClo, ymax=SIChi), fill="steelblue2", color="steelblue2") + 
   geom_line(color="red")+
-  facet_wrap(~subject+condition) +
+  facet_wrap(~subject+condition, nrow=nsubs) +
   ggtitle('Survivor Interaction Contrasts')
 
-
+print(sicp)
 ```
 We tested the significance of the positive and negative SIC regions using the Houpt-Townsend D+ and D- statistics.
 
@@ -485,6 +550,47 @@ sic_test_table.s1114$test = c("D+", "D-", "D+", "D-")
 sic_test_table.s1114 = sic_test_table.s1114[c("condition", "test", "stat", "p")]
 kable(sic_test_table.s1114, caption = "SIC tests for subject 1114")
 
+## 1024
+sic_test_table = 
+   rbind(cbind("stat" = round(sic.s1024.swaps$SICtest$positive$statistic,2), "p" = round(sic.s1024.swaps$SICtest$positive$p.value,2)),
+         cbind("stat" = round(sic.s1024.swaps$SICtest$negative$statistic,2), "p" = round(sic.s1024.swaps$SICtest$negative$p.value,2)),
+         cbind("stat" = round(sic.s1024.swaps$SICtest$positive$statistic,2), "p" = round(sic.s1024.swaps$SICtest$positive$p.value,2)),
+         cbind("stat" = round(sic.s1024.swaps$SICtest$negative$statistic,2), "p" = round(sic.s1024.swaps$SICtest$negative$p.value,2)))
+
+rownames(sic_test_table) = NULL
+sic_test_table.s1024 = as.data.frame(sic_test_table)
+sic_test_table.s1024$condition = c("swaps", "swaps", "diffs", "diffs")
+sic_test_table.s1024$test = c("D+", "D-", "D+", "D-")
+sic_test_table.s1024 = sic_test_table.s1024[c("condition", "test", "stat", "p")]
+kable(sic_test_table.s1024, caption = "SIC tests for subject 1024")
+
+## 1911
+sic_test_table = 
+   rbind(cbind("stat" = round(sic.s1911.swaps$SICtest$positive$statistic,2), "p" = round(sic.s1911.swaps$SICtest$positive$p.value,2)),
+         cbind("stat" = round(sic.s1911.swaps$SICtest$negative$statistic,2), "p" = round(sic.s1911.swaps$SICtest$negative$p.value,2)),
+         cbind("stat" = round(sic.s1911.swaps$SICtest$positive$statistic,2), "p" = round(sic.s1911.swaps$SICtest$positive$p.value,2)),
+         cbind("stat" = round(sic.s1911.swaps$SICtest$negative$statistic,2), "p" = round(sic.s1911.swaps$SICtest$negative$p.value,2)))
+
+rownames(sic_test_table) = NULL
+sic_test_table.s1911 = as.data.frame(sic_test_table)
+sic_test_table.s1911$condition = c("swaps", "swaps", "diffs", "diffs")
+sic_test_table.s1911$test = c("D+", "D-", "D+", "D-")
+sic_test_table.s1911 = sic_test_table.s1911[c("condition", "test", "stat", "p")]
+kable(sic_test_table.s1911, caption = "SIC tests for subject 1911")
+
+## 2222
+sic_test_table = 
+   rbind(cbind("stat" = round(sic.s2222.swaps$SICtest$positive$statistic,2), "p" = round(sic.s2222.swaps$SICtest$positive$p.value,2)),
+         cbind("stat" = round(sic.s2222.swaps$SICtest$negative$statistic,2), "p" = round(sic.s2222.swaps$SICtest$negative$p.value,2)),
+         cbind("stat" = round(sic.s2222.swaps$SICtest$positive$statistic,2), "p" = round(sic.s2222.swaps$SICtest$positive$p.value,2)),
+         cbind("stat" = round(sic.s2222.swaps$SICtest$negative$statistic,2), "p" = round(sic.s2222.swaps$SICtest$negative$p.value,2)))
+
+rownames(sic_test_table) = NULL
+sic_test_table.s2222 = as.data.frame(sic_test_table)
+sic_test_table.s2222$condition = c("swaps", "swaps", "diffs", "diffs")
+sic_test_table.s2222$test = c("D+", "D-", "D+", "D-")
+sic_test_table.s2222 = sic_test_table.s2222[c("condition", "test", "stat", "p")]
+kable(sic_test_table.s2222, caption = "SIC tests for subject 2222")
 
 ```
 
