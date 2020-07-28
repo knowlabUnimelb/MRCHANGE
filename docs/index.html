@@ -409,7 +409,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-06-08
+<strong>Last updated:</strong> 2020-07-28
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -500,16 +500,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomknowlabUnimelbMRCHANGEtree6da7858a98b6ae0c90992b9b52015e20d3dc7a9btargetblank6da7858a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/knowlabUnimelb/MRCHANGE/tree/6da7858a98b6ae0c90992b9b52015e20d3dc7a9b" target="_blank">6da7858</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomknowlabUnimelbMRCHANGEtreeed6951ddb43529fa0ea0bbc6ab54079d888d7b8atargetblanked6951da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/knowlabUnimelb/MRCHANGE/tree/ed6951ddb43529fa0ea0bbc6ab54079d888d7b8a" target="_blank">ed6951d</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomknowlabUnimelbMRCHANGEtree6da7858a98b6ae0c90992b9b52015e20d3dc7a9btargetblank6da7858a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomknowlabUnimelbMRCHANGEtreeed6951ddb43529fa0ea0bbc6ab54079d888d7b8atargetblanked6951da" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/knowlabUnimelb/MRCHANGE/tree/6da7858a98b6ae0c90992b9b52015e20d3dc7a9b" target="_blank">6da7858</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/knowlabUnimelb/MRCHANGE/tree/ed6951ddb43529fa0ea0bbc6ab54079d888d7b8a" target="_blank">ed6951d</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -519,9 +519,18 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/site_libs/
+    Ignored:    code/stims_black/
+    Ignored:    code/stims_white/
 
 Untracked files:
+    Untracked:  code/MRBLACK_PY.zip
+    Untracked:  code/MRBLACK_PY/
     Untracked:  code/MRCHANGE_PY/
+    Untracked:  code/MRWHITE_PY.zip
+    Untracked:  code/MRWHITE_PY/
+    Untracked:  data/s24.zip
+    Untracked:  data/s911.zip
+    Untracked:  temp/
 
 </code></pre>
 <p>
@@ -560,6 +569,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/knowlabUnimelb/MRCHANGE/blob/ed6951ddb43529fa0ea0bbc6ab54079d888d7b8a/analysis/index.Rmd" target="_blank">ed6951d</a>
+</td>
+<td>
+knowlabUnimelb
+</td>
+<td>
+2020-07-28
+</td>
+<td>
+Update analysis with new data
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/knowlabUnimelb/MRCHANGE/c743e6137f3fb9b5f82dfba4a0a4975f7d06e753/docs/index.html" target="_blank">c743e61</a>
+</td>
+<td>
+knowlabUnimelb
+</td>
+<td>
+2020-06-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -745,7 +788,7 @@ Start workflowr project.
 </div>
 <div id="method" class="section level1">
 <h1>Method</h1>
-<p>We tested 2 participants for 10 sessions: 5 sessions in the contrast swaps condition and 5 sessions in the contrast difference condition. One participant (s1114) completed 6 sessions of the contrast swaps condition.</p>
+<p>We tested 5 participants for 10 sessions: 5 sessions in the contrast swaps condition and 5 sessions in the contrast difference condition. One participant (s1114) completed 6 sessions of the contrast swaps condition.</p>
 </div>
 <div id="mean-accuracy-and-response-time-for-each-item-condition" class="section level1">
 <h1>Mean accuracy and response time for each item condition</h1>
@@ -771,59 +814,143 @@ Start workflowr project.
 <tbody>
 <tr class="odd">
 <td>1</td>
-<td align="right">1001</td>
+<td align="right">24</td>
 <td align="left">swaps</td>
-<td align="right">240</td>
-<td align="right">240</td>
-<td align="right">240</td>
-<td align="right">240</td>
-<td align="right">244</td>
-<td align="right">244</td>
-<td align="right">242</td>
-<td align="right">230</td>
-<td align="right">1920</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">620</td>
+<td align="right">605</td>
+<td align="right">585</td>
+<td align="right">590</td>
+<td align="right">4795</td>
 </tr>
 <tr class="even">
-<td>3</td>
-<td align="right">1001</td>
+<td>6</td>
+<td align="right">24</td>
 <td align="left">diffs</td>
-<td align="right">192</td>
-<td align="right">192</td>
-<td align="right">192</td>
-<td align="right">192</td>
-<td align="right">210</td>
-<td align="right">190</td>
-<td align="right">182</td>
-<td align="right">186</td>
-<td align="right">1536</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">610</td>
+<td align="right">635</td>
+<td align="right">580</td>
+<td align="right">575</td>
+<td align="right">4800</td>
 </tr>
 <tr class="odd">
 <td>2</td>
-<td align="right">1114</td>
+<td align="right">911</td>
 <td align="left">swaps</td>
-<td align="right">272</td>
-<td align="right">272</td>
-<td align="right">272</td>
-<td align="right">272</td>
-<td align="right">258</td>
-<td align="right">290</td>
-<td align="right">276</td>
-<td align="right">264</td>
-<td align="right">2174</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">660</td>
+<td align="right">555</td>
+<td align="right">610</td>
+<td align="right">575</td>
+<td align="right">4800</td>
 </tr>
 <tr class="even">
+<td>7</td>
+<td align="right">911</td>
+<td align="left">diffs</td>
+<td align="right">840</td>
+<td align="right">840</td>
+<td align="right">840</td>
+<td align="right">840</td>
+<td align="right">870</td>
+<td align="right">835</td>
+<td align="right">795</td>
+<td align="right">860</td>
+<td align="right">6720</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td align="right">1001</td>
+<td align="left">swaps</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">610</td>
+<td align="right">610</td>
+<td align="right">605</td>
+<td align="right">575</td>
+<td align="right">4800</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td align="right">1001</td>
+<td align="left">diffs</td>
+<td align="right">480</td>
+<td align="right">480</td>
+<td align="right">480</td>
+<td align="right">480</td>
+<td align="right">525</td>
+<td align="right">475</td>
+<td align="right">455</td>
+<td align="right">465</td>
+<td align="right">3840</td>
+</tr>
+<tr class="odd">
 <td>4</td>
 <td align="right">1114</td>
+<td align="left">swaps</td>
+<td align="right">680</td>
+<td align="right">680</td>
+<td align="right">680</td>
+<td align="right">680</td>
+<td align="right">645</td>
+<td align="right">725</td>
+<td align="right">690</td>
+<td align="right">660</td>
+<td align="right">5435</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td align="right">1114</td>
 <td align="left">diffs</td>
-<td align="right">240</td>
-<td align="right">240</td>
-<td align="right">240</td>
-<td align="right">240</td>
-<td align="right">240</td>
-<td align="right">248</td>
-<td align="right">238</td>
-<td align="right">234</td>
-<td align="right">1920</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">620</td>
+<td align="right">595</td>
+<td align="right">585</td>
+<td align="right">4800</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td align="right">2222</td>
+<td align="left">swaps</td>
+<td align="right">840</td>
+<td align="right">840</td>
+<td align="right">840</td>
+<td align="right">840</td>
+<td align="right">890</td>
+<td align="right">760</td>
+<td align="right">885</td>
+<td align="right">825</td>
+<td align="right">6720</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td align="right">2222</td>
+<td align="left">diffs</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">600</td>
+<td align="right">610</td>
+<td align="right">555</td>
+<td align="right">590</td>
+<td align="right">645</td>
+<td align="right">4800</td>
 </tr>
 </tbody>
 </table>
@@ -848,6 +975,62 @@ Start workflowr project.
 <tbody>
 <tr class="odd">
 <td>1</td>
+<td align="right">24</td>
+<td align="left">swaps</td>
+<td align="right">1.00</td>
+<td align="right">0.92</td>
+<td align="right">0.95</td>
+<td align="right">0.74</td>
+<td align="right">0.82</td>
+<td align="right">0.25</td>
+<td align="right">0.99</td>
+<td align="right">0.64</td>
+<td align="right">0.93</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td align="right">24</td>
+<td align="left">diffs</td>
+<td align="right">0.99</td>
+<td align="right">0.98</td>
+<td align="right">1.00</td>
+<td align="right">0.79</td>
+<td align="right">0.78</td>
+<td align="right">0.28</td>
+<td align="right">0.99</td>
+<td align="right">0.50</td>
+<td align="right">0.93</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td align="right">911</td>
+<td align="left">swaps</td>
+<td align="right">0.98</td>
+<td align="right">0.98</td>
+<td align="right">0.98</td>
+<td align="right">0.90</td>
+<td align="right">0.92</td>
+<td align="right">0.53</td>
+<td align="right">0.98</td>
+<td align="right">0.78</td>
+<td align="right">0.84</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td align="right">911</td>
+<td align="left">diffs</td>
+<td align="right">0.98</td>
+<td align="right">0.97</td>
+<td align="right">0.97</td>
+<td align="right">0.90</td>
+<td align="right">0.83</td>
+<td align="right">0.43</td>
+<td align="right">0.93</td>
+<td align="right">0.76</td>
+<td align="right">0.88</td>
+</tr>
+<tr class="odd">
+<td>3</td>
 <td align="right">1001</td>
 <td align="left">swaps</td>
 <td align="right">0.99</td>
@@ -861,7 +1044,7 @@ Start workflowr project.
 <td align="right">0.93</td>
 </tr>
 <tr class="even">
-<td>3</td>
+<td>8</td>
 <td align="right">1001</td>
 <td align="left">diffs</td>
 <td align="right">0.99</td>
@@ -875,7 +1058,7 @@ Start workflowr project.
 <td align="right">0.93</td>
 </tr>
 <tr class="odd">
-<td>2</td>
+<td>4</td>
 <td align="right">1114</td>
 <td align="left">swaps</td>
 <td align="right">0.18</td>
@@ -889,7 +1072,7 @@ Start workflowr project.
 <td align="right">0.94</td>
 </tr>
 <tr class="even">
-<td>4</td>
+<td>9</td>
 <td align="right">1114</td>
 <td align="left">diffs</td>
 <td align="right">1.00</td>
@@ -901,6 +1084,34 @@ Start workflowr project.
 <td align="right">0.78</td>
 <td align="right">0.70</td>
 <td align="right">0.92</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td align="right">2222</td>
+<td align="left">swaps</td>
+<td align="right">1.00</td>
+<td align="right">0.92</td>
+<td align="right">0.97</td>
+<td align="right">0.80</td>
+<td align="right">0.89</td>
+<td align="right">0.28</td>
+<td align="right">0.94</td>
+<td align="right">0.59</td>
+<td align="right">0.93</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td align="right">2222</td>
+<td align="left">diffs</td>
+<td align="right">0.98</td>
+<td align="right">0.95</td>
+<td align="right">0.98</td>
+<td align="right">0.83</td>
+<td align="right">0.83</td>
+<td align="right">0.34</td>
+<td align="right">0.97</td>
+<td align="right">0.66</td>
+<td align="right">0.88</td>
 </tr>
 </tbody>
 </table>
@@ -925,6 +1136,62 @@ Start workflowr project.
 <tbody>
 <tr class="odd">
 <td>1</td>
+<td align="right">24</td>
+<td align="left">swaps</td>
+<td align="right">0.411</td>
+<td align="right">0.399</td>
+<td align="right">0.373</td>
+<td align="right">0.421</td>
+<td align="right">0.422</td>
+<td align="right">0.450</td>
+<td align="right">0.379</td>
+<td align="right">0.439</td>
+<td align="right">0.381</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td align="right">24</td>
+<td align="left">diffs</td>
+<td align="right">0.378</td>
+<td align="right">0.404</td>
+<td align="right">0.394</td>
+<td align="right">0.437</td>
+<td align="right">0.421</td>
+<td align="right">0.417</td>
+<td align="right">0.459</td>
+<td align="right">0.422</td>
+<td align="right">0.406</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td align="right">911</td>
+<td align="left">swaps</td>
+<td align="right">0.426</td>
+<td align="right">0.493</td>
+<td align="right">0.442</td>
+<td align="right">0.531</td>
+<td align="right">0.582</td>
+<td align="right">0.733</td>
+<td align="right">0.451</td>
+<td align="right">0.567</td>
+<td align="right">0.602</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td align="right">911</td>
+<td align="left">diffs</td>
+<td align="right">0.409</td>
+<td align="right">0.457</td>
+<td align="right">0.437</td>
+<td align="right">0.526</td>
+<td align="right">0.527</td>
+<td align="right">0.554</td>
+<td align="right">0.441</td>
+<td align="right">0.516</td>
+<td align="right">0.538</td>
+</tr>
+<tr class="odd">
+<td>3</td>
 <td align="right">1001</td>
 <td align="left">swaps</td>
 <td align="right">0.581</td>
@@ -938,21 +1205,21 @@ Start workflowr project.
 <td align="right">0.740</td>
 </tr>
 <tr class="even">
-<td>3</td>
+<td>8</td>
 <td align="right">1001</td>
 <td align="left">diffs</td>
-<td align="right">0.572</td>
-<td align="right">0.625</td>
-<td align="right">0.566</td>
-<td align="right">0.743</td>
-<td align="right">0.654</td>
+<td align="right">0.577</td>
+<td align="right">0.624</td>
+<td align="right">0.567</td>
+<td align="right">0.729</td>
+<td align="right">0.653</td>
 <td align="right">0.767</td>
-<td align="right">0.642</td>
-<td align="right">0.861</td>
-<td align="right">0.754</td>
+<td align="right">0.632</td>
+<td align="right">0.859</td>
+<td align="right">0.759</td>
 </tr>
 <tr class="odd">
-<td>2</td>
+<td>4</td>
 <td align="right">1114</td>
 <td align="left">swaps</td>
 <td align="right">0.414</td>
@@ -966,18 +1233,46 @@ Start workflowr project.
 <td align="right">0.387</td>
 </tr>
 <tr class="even">
-<td>4</td>
+<td>9</td>
 <td align="right">1114</td>
 <td align="left">diffs</td>
-<td align="right">0.359</td>
-<td align="right">0.396</td>
-<td align="right">0.373</td>
-<td align="right">0.396</td>
-<td align="right">0.400</td>
-<td align="right">0.392</td>
-<td align="right">0.394</td>
+<td align="right">0.357</td>
+<td align="right">0.393</td>
+<td align="right">0.377</td>
+<td align="right">0.397</td>
+<td align="right">0.399</td>
+<td align="right">0.391</td>
+<td align="right">0.393</td>
 <td align="right">0.413</td>
 <td align="right">0.379</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td align="right">2222</td>
+<td align="left">swaps</td>
+<td align="right">0.534</td>
+<td align="right">0.570</td>
+<td align="right">0.577</td>
+<td align="right">0.675</td>
+<td align="right">0.594</td>
+<td align="right">0.783</td>
+<td align="right">0.568</td>
+<td align="right">0.667</td>
+<td align="right">0.558</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td align="right">2222</td>
+<td align="left">diffs</td>
+<td align="right">0.533</td>
+<td align="right">0.600</td>
+<td align="right">0.570</td>
+<td align="right">0.655</td>
+<td align="right">0.677</td>
+<td align="right">0.682</td>
+<td align="right">0.561</td>
+<td align="right">0.652</td>
+<td align="right">0.630</td>
 </tr>
 </tbody>
 </table>
@@ -1002,6 +1297,62 @@ Start workflowr project.
 <tbody>
 <tr class="odd">
 <td>1</td>
+<td align="right">24</td>
+<td align="left">swaps</td>
+<td align="right">NA</td>
+<td align="right">0.377</td>
+<td align="right">0.308</td>
+<td align="right">0.409</td>
+<td align="right">0.359</td>
+<td align="right">0.382</td>
+<td align="right">0.274</td>
+<td align="right">0.385</td>
+<td align="right">0.430</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td align="right">24</td>
+<td align="left">diffs</td>
+<td align="right">0.366</td>
+<td align="right">0.472</td>
+<td align="right">0.385</td>
+<td align="right">0.440</td>
+<td align="right">0.435</td>
+<td align="right">0.404</td>
+<td align="right">0.407</td>
+<td align="right">0.456</td>
+<td align="right">0.399</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td align="right">911</td>
+<td align="left">swaps</td>
+<td align="right">0.456</td>
+<td align="right">0.532</td>
+<td align="right">0.478</td>
+<td align="right">0.648</td>
+<td align="right">0.478</td>
+<td align="right">0.633</td>
+<td align="right">0.563</td>
+<td align="right">0.637</td>
+<td align="right">0.675</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td align="right">911</td>
+<td align="left">diffs</td>
+<td align="right">0.393</td>
+<td align="right">0.420</td>
+<td align="right">0.420</td>
+<td align="right">0.525</td>
+<td align="right">0.510</td>
+<td align="right">0.693</td>
+<td align="right">0.434</td>
+<td align="right">0.498</td>
+<td align="right">0.552</td>
+</tr>
+<tr class="odd">
+<td>3</td>
 <td align="right">1001</td>
 <td align="left">swaps</td>
 <td align="right">0.477</td>
@@ -1015,21 +1366,21 @@ Start workflowr project.
 <td align="right">1.100</td>
 </tr>
 <tr class="even">
-<td>3</td>
+<td>8</td>
 <td align="right">1001</td>
 <td align="left">diffs</td>
-<td align="right">0.644</td>
-<td align="right">0.600</td>
-<td align="right">0.550</td>
-<td align="right">0.618</td>
-<td align="right">0.574</td>
-<td align="right">0.722</td>
-<td align="right">0.643</td>
-<td align="right">0.791</td>
-<td align="right">0.791</td>
+<td align="right">0.631</td>
+<td align="right">0.587</td>
+<td align="right">0.530</td>
+<td align="right">0.721</td>
+<td align="right">0.584</td>
+<td align="right">0.648</td>
+<td align="right">0.726</td>
+<td align="right">0.803</td>
+<td align="right">0.747</td>
 </tr>
 <tr class="odd">
-<td>2</td>
+<td>4</td>
 <td align="right">1114</td>
 <td align="left">swaps</td>
 <td align="right">0.418</td>
@@ -1043,18 +1394,46 @@ Start workflowr project.
 <td align="right">0.437</td>
 </tr>
 <tr class="even">
-<td>4</td>
+<td>9</td>
 <td align="right">1114</td>
 <td align="left">diffs</td>
-<td align="right">0.336</td>
-<td align="right">0.372</td>
-<td align="right">0.387</td>
-<td align="right">0.398</td>
-<td align="right">0.399</td>
-<td align="right">0.377</td>
-<td align="right">0.392</td>
-<td align="right">0.416</td>
-<td align="right">0.381</td>
+<td align="right">0.359</td>
+<td align="right">0.405</td>
+<td align="right">0.359</td>
+<td align="right">0.394</td>
+<td align="right">0.409</td>
+<td align="right">0.391</td>
+<td align="right">0.400</td>
+<td align="right">0.417</td>
+<td align="right">0.378</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td align="right">2222</td>
+<td align="left">swaps</td>
+<td align="right">NA</td>
+<td align="right">0.767</td>
+<td align="right">0.824</td>
+<td align="right">0.581</td>
+<td align="right">0.593</td>
+<td align="right">0.580</td>
+<td align="right">0.513</td>
+<td align="right">0.575</td>
+<td align="right">0.709</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td align="right">2222</td>
+<td align="left">diffs</td>
+<td align="right">0.532</td>
+<td align="right">0.627</td>
+<td align="right">0.514</td>
+<td align="right">0.605</td>
+<td align="right">0.693</td>
+<td align="right">0.756</td>
+<td align="right">0.566</td>
+<td align="right">0.647</td>
+<td align="right">0.652</td>
 </tr>
 </tbody>
 </table>
@@ -1078,14 +1457,14 @@ Start workflowr project.
 <tr class="odd">
 <td align="left">swaps</td>
 <td align="right">0.049</td>
-<td align="right">0.05</td>
-<td align="right">0e+00</td>
+<td align="right">0.06</td>
+<td align="right">0.0000</td>
 </tr>
 <tr class="even">
 <td align="left">diffs</td>
-<td align="right">0.124</td>
-<td align="right">0.10</td>
-<td align="right">8e-04</td>
+<td align="right">0.115</td>
+<td align="right">0.01</td>
+<td align="right">0.5547</td>
 </tr>
 </tbody>
 </table>
@@ -1103,14 +1482,89 @@ Start workflowr project.
 <tr class="odd">
 <td align="left">swaps</td>
 <td align="right">0.000</td>
-<td align="right">0.00</td>
-<td align="right">0.1545</td>
+<td align="right">0.02</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">diffs</td>
-<td align="right">-0.014</td>
+<td align="right">-0.016</td>
+<td align="right">0.06</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Subject 1024: Adjusted Rank Transform test of the MIC</caption>
+<thead>
+<tr class="header">
+<th align="left">condition</th>
+<th align="right">mic</th>
+<th align="right">stat</th>
+<th align="right">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">swaps</td>
+<td align="right">0.060</td>
+<td align="right">0.05</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">diffs</td>
+<td align="right">0.017</td>
+<td align="right">0.10</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Subject 1911: Adjusted Rank Transform test of the MIC</caption>
+<thead>
+<tr class="header">
+<th align="left">condition</th>
+<th align="right">mic</th>
+<th align="right">stat</th>
+<th align="right">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">swaps</td>
+<td align="right">0.022</td>
+<td align="right">0.00</td>
+<td align="right">0.0241</td>
+</tr>
+<tr class="even">
+<td align="left">diffs</td>
+<td align="right">0.041</td>
 <td align="right">-0.01</td>
-<td align="right">0.3402</td>
+<td align="right">0.1309</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Subject 2222: Adjusted Rank Transform test of the MIC</caption>
+<thead>
+<tr class="header">
+<th align="left">condition</th>
+<th align="right">mic</th>
+<th align="right">stat</th>
+<th align="right">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">swaps</td>
+<td align="right">0.062</td>
+<td align="right">0.06</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">diffs</td>
+<td align="right">0.018</td>
+<td align="right">0.03</td>
+<td align="right">0.0011</td>
 </tr>
 </tbody>
 </table>
@@ -1118,9 +1572,149 @@ Start workflowr project.
 <div id="test-of-stochastic-dominance" class="section level1">
 <h1>Test of stochastic dominance</h1>
 <p>We tested the ordering of the survivor functions using a series of Kolmogorov-Smirnoff test. If stochastic dominance is preserved, then we expect the first four tests to be significant while the second four tests are not.</p>
-<p><img src="figure/index.Rmd/Splot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>[1] 5.1 4.1 4.1 2.1 <img src="figure/index.Rmd/Splot-1.png" width="672" style="display: block; margin: auto;" /></p>
 <table>
 <caption>Stochastic Dominance tests for subject s1001</caption>
+<thead>
+<tr class="header">
+<th align="left">Test</th>
+<th align="right">ks.swaps</th>
+<th align="right">p.swaps</th>
+<th align="right">ks.diffs</th>
+<th align="right">p.diffs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">S.hh &gt; S.hl</td>
+<td align="right">0.195</td>
+<td align="right">0.000</td>
+<td align="right">0.305</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">S.hh &gt; S.lh</td>
+<td align="right">0.073</td>
+<td align="right">0.045</td>
+<td align="right">0.178</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">S.hl &gt; S.ll</td>
+<td align="right">0.192</td>
+<td align="right">0.000</td>
+<td align="right">0.156</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">S.lh &gt; S.ll</td>
+<td align="right">0.352</td>
+<td align="right">0.000</td>
+<td align="right">0.249</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">S.hh &lt; S.hl</td>
+<td align="right">0.020</td>
+<td align="right">0.800</td>
+<td align="right">0.000</td>
+<td align="right">1.000</td>
+</tr>
+<tr class="even">
+<td align="left">S.hh &lt; S.lh</td>
+<td align="right">0.118</td>
+<td align="right">0.000</td>
+<td align="right">0.017</td>
+<td align="right">0.842</td>
+</tr>
+<tr class="odd">
+<td align="left">S.hl &lt; S.ll</td>
+<td align="right">0.009</td>
+<td align="right">0.960</td>
+<td align="right">0.034</td>
+<td align="right">0.554</td>
+</tr>
+<tr class="even">
+<td align="left">S.lh &lt; S.ll</td>
+<td align="right">0.002</td>
+<td align="right">0.997</td>
+<td align="right">0.007</td>
+<td align="right">0.977</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Stochastic Dominance tests for subject s1114</caption>
+<thead>
+<tr class="header">
+<th align="left">Test</th>
+<th align="right">ks.swaps</th>
+<th align="right">p.swaps</th>
+<th align="right">ks.diffs</th>
+<th align="right">p.diffs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">S.hh &gt; S.hl</td>
+<td align="right">0.360</td>
+<td align="right">0.000</td>
+<td align="right">0.319</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">S.hh &gt; S.lh</td>
+<td align="right">0.076</td>
+<td align="right">0.032</td>
+<td align="right">0.195</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">S.hl &gt; S.ll</td>
+<td align="right">0.179</td>
+<td align="right">0.000</td>
+<td align="right">0.286</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">S.lh &gt; S.ll</td>
+<td align="right">0.417</td>
+<td align="right">0.000</td>
+<td align="right">0.458</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">S.hh &lt; S.hl</td>
+<td align="right">0.000</td>
+<td align="right">1.000</td>
+<td align="right">0.000</td>
+<td align="right">1.000</td>
+</tr>
+<tr class="even">
+<td align="left">S.hh &lt; S.lh</td>
+<td align="right">0.059</td>
+<td align="right">0.125</td>
+<td align="right">0.019</td>
+<td align="right">0.751</td>
+</tr>
+<tr class="odd">
+<td align="left">S.hl &lt; S.ll</td>
+<td align="right">0.033</td>
+<td align="right">0.547</td>
+<td align="right">0.017</td>
+<td align="right">0.793</td>
+</tr>
+<tr class="even">
+<td align="left">S.lh &lt; S.ll</td>
+<td align="right">0.001</td>
+<td align="right">1.000</td>
+<td align="right">0.007</td>
+<td align="right">0.967</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Stochastic Dominance tests for subject s1024</caption>
 <thead>
 <tr class="header">
 <th align="left">Test</th>
@@ -1141,9 +1735,9 @@ Start workflowr project.
 <tr class="even">
 <td align="left">S.hh &gt; S.lh</td>
 <td align="right">0.109</td>
-<td align="right">0.058</td>
-<td align="right">0.200</td>
 <td align="right">0.001</td>
+<td align="right">0.200</td>
+<td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">S.hl &gt; S.ll</td>
@@ -1164,33 +1758,33 @@ Start workflowr project.
 <td align="right">0.000</td>
 <td align="right">1.000</td>
 <td align="right">0.052</td>
-<td align="right">0.596</td>
+<td align="right">0.275</td>
 </tr>
 <tr class="even">
 <td align="left">S.hh &lt; S.lh</td>
 <td align="right">0.000</td>
 <td align="right">1.000</td>
 <td align="right">0.095</td>
-<td align="right">0.182</td>
+<td align="right">0.014</td>
 </tr>
 <tr class="odd">
 <td align="left">S.hl &lt; S.ll</td>
 <td align="right">0.019</td>
-<td align="right">0.921</td>
+<td align="right">0.814</td>
 <td align="right">0.023</td>
-<td align="right">0.907</td>
+<td align="right">0.784</td>
 </tr>
 <tr class="even">
 <td align="left">S.lh &lt; S.ll</td>
 <td align="right">0.019</td>
-<td align="right">0.920</td>
+<td align="right">0.812</td>
 <td align="right">0.000</td>
 <td align="right">1.000</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption>Stochastic Dominance tests for subject s1114</caption>
+<caption>Stochastic Dominance tests for subject s1911</caption>
 <thead>
 <tr class="header">
 <th align="left">Test</th>
@@ -1204,58 +1798,128 @@ Start workflowr project.
 <tr class="odd">
 <td align="left">S.hh &gt; S.hl</td>
 <td align="right">0.093</td>
-<td align="right">0.496</td>
+<td align="right">0.173</td>
 <td align="right">0.238</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">S.hh &gt; S.lh</td>
 <td align="right">0.070</td>
-<td align="right">0.674</td>
+<td align="right">0.373</td>
 <td align="right">0.154</td>
-<td align="right">0.004</td>
+<td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">S.hl &gt; S.ll</td>
 <td align="right">0.123</td>
-<td align="right">0.024</td>
+<td align="right">0.000</td>
 <td align="right">0.175</td>
-<td align="right">0.002</td>
+<td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">S.lh &gt; S.ll</td>
 <td align="right">0.144</td>
-<td align="right">0.006</td>
+<td align="right">0.000</td>
 <td align="right">0.249</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">S.hh &lt; S.hl</td>
 <td align="right">0.133</td>
-<td align="right">0.240</td>
+<td align="right">0.028</td>
 <td align="right">0.000</td>
 <td align="right">1.000</td>
 </tr>
 <tr class="even">
 <td align="left">S.hh &lt; S.lh</td>
 <td align="right">0.082</td>
-<td align="right">0.583</td>
+<td align="right">0.260</td>
 <td align="right">0.000</td>
 <td align="right">1.000</td>
 </tr>
 <tr class="odd">
 <td align="left">S.hl &lt; S.ll</td>
 <td align="right">0.024</td>
-<td align="right">0.868</td>
+<td align="right">0.703</td>
 <td align="right">0.039</td>
-<td align="right">0.729</td>
+<td align="right">0.454</td>
 </tr>
 <tr class="even">
 <td align="left">S.lh &lt; S.ll</td>
 <td align="right">0.080</td>
-<td align="right">0.202</td>
+<td align="right">0.018</td>
 <td align="right">0.038</td>
-<td align="right">0.747</td>
+<td align="right">0.483</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Stochastic Dominance tests for subject s2222</caption>
+<thead>
+<tr class="header">
+<th align="left">Test</th>
+<th align="right">ks.swaps</th>
+<th align="right">p.swaps</th>
+<th align="right">ks.diffs</th>
+<th align="right">p.diffs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">S.hh &gt; S.hl</td>
+<td align="right">0.196</td>
+<td align="right">0.000</td>
+<td align="right">0.204</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">S.hh &gt; S.lh</td>
+<td align="right">0.196</td>
+<td align="right">0.000</td>
+<td align="right">0.105</td>
+<td align="right">0.002</td>
+</tr>
+<tr class="odd">
+<td align="left">S.hl &gt; S.ll</td>
+<td align="right">0.342</td>
+<td align="right">0.000</td>
+<td align="right">0.171</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">S.lh &gt; S.ll</td>
+<td align="right">0.342</td>
+<td align="right">0.000</td>
+<td align="right">0.301</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">S.hh &lt; S.hl</td>
+<td align="right">0.089</td>
+<td align="right">0.002</td>
+<td align="right">0.065</td>
+<td align="right">0.088</td>
+</tr>
+<tr class="even">
+<td align="left">S.hh &lt; S.lh</td>
+<td align="right">0.005</td>
+<td align="right">0.982</td>
+<td align="right">0.034</td>
+<td align="right">0.512</td>
+</tr>
+<tr class="odd">
+<td align="left">S.hl &lt; S.ll</td>
+<td align="right">0.000</td>
+<td align="right">1.000</td>
+<td align="right">0.024</td>
+<td align="right">0.738</td>
+</tr>
+<tr class="even">
+<td align="left">S.lh &lt; S.ll</td>
+<td align="right">0.004</td>
+<td align="right">0.991</td>
+<td align="right">0.010</td>
+<td align="right">0.948</td>
 </tr>
 </tbody>
 </table>
@@ -1278,26 +1942,26 @@ Start workflowr project.
 <tr class="odd">
 <td align="left">swaps</td>
 <td align="left">D+</td>
-<td align="right">0.26</td>
+<td align="right">0.31</td>
 <td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">swaps</td>
 <td align="left">D-</td>
-<td align="right">0.05</td>
-<td align="right">0.79</td>
+<td align="right">0.02</td>
+<td align="right">0.93</td>
 </tr>
 <tr class="odd">
 <td align="left">diffs</td>
 <td align="left">D+</td>
-<td align="right">0.26</td>
+<td align="right">0.14</td>
 <td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">diffs</td>
 <td align="left">D-</td>
-<td align="right">0.11</td>
-<td align="right">0.35</td>
+<td align="right">0.17</td>
+<td align="right">0.00</td>
 </tr>
 </tbody>
 </table>
@@ -1315,26 +1979,137 @@ Start workflowr project.
 <tr class="odd">
 <td align="left">swaps</td>
 <td align="left">D+</td>
-<td align="right">0.17</td>
-<td align="right">0.16</td>
+<td align="right">0.13</td>
+<td align="right">0.01</td>
+</tr>
+<tr class="even">
+<td align="left">swaps</td>
+<td align="left">D-</td>
+<td align="right">0.07</td>
+<td align="right">0.29</td>
+</tr>
+<tr class="odd">
+<td align="left">diffs</td>
+<td align="left">D+</td>
+<td align="right">0.13</td>
+<td align="right">0.01</td>
+</tr>
+<tr class="even">
+<td align="left">diffs</td>
+<td align="left">D-</td>
+<td align="right">0.07</td>
+<td align="right">0.29</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>SIC tests for subject 1024</caption>
+<thead>
+<tr class="header">
+<th align="left">condition</th>
+<th align="left">test</th>
+<th align="right">stat</th>
+<th align="right">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">swaps</td>
+<td align="left">D+</td>
+<td align="right">0.26</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">swaps</td>
 <td align="left">D-</td>
 <td align="right">0.05</td>
-<td align="right">0.87</td>
+<td align="right">0.55</td>
 </tr>
 <tr class="odd">
 <td align="left">diffs</td>
 <td align="left">D+</td>
-<td align="right">0.17</td>
-<td align="right">0.16</td>
+<td align="right">0.26</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">diffs</td>
 <td align="left">D-</td>
 <td align="right">0.05</td>
-<td align="right">0.87</td>
+<td align="right">0.55</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>SIC tests for subject 1911</caption>
+<thead>
+<tr class="header">
+<th align="left">condition</th>
+<th align="left">test</th>
+<th align="right">stat</th>
+<th align="right">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">swaps</td>
+<td align="left">D+</td>
+<td align="right">0.17</td>
+<td align="right">0.01</td>
+</tr>
+<tr class="even">
+<td align="left">swaps</td>
+<td align="left">D-</td>
+<td align="right">0.05</td>
+<td align="right">0.71</td>
+</tr>
+<tr class="odd">
+<td align="left">diffs</td>
+<td align="left">D+</td>
+<td align="right">0.17</td>
+<td align="right">0.01</td>
+</tr>
+<tr class="even">
+<td align="left">diffs</td>
+<td align="left">D-</td>
+<td align="right">0.05</td>
+<td align="right">0.71</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>SIC tests for subject 2222</caption>
+<thead>
+<tr class="header">
+<th align="left">condition</th>
+<th align="left">test</th>
+<th align="right">stat</th>
+<th align="right">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">swaps</td>
+<td align="left">D+</td>
+<td align="right">0.22</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">swaps</td>
+<td align="left">D-</td>
+<td align="right">0.04</td>
+<td align="right">0.62</td>
+</tr>
+<tr class="odd">
+<td align="left">diffs</td>
+<td align="left">D+</td>
+<td align="right">0.22</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">diffs</td>
+<td align="left">D-</td>
+<td align="right">0.04</td>
+<td align="right">0.62</td>
 </tr>
 </tbody>
 </table>
